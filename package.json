@@ -1,0 +1,26 @@
+{
+  "name": "api-host-share",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Maycon de Arruda Rebordão <r.maycon1122@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ./src/index.js"
+  },
+  "nodemonConfig": {
+    "ignore": ["test/*", "docs/*"],
+    "delay": "0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.14",
+    "multer": "^1.3.0",
+    "nodemon": "^1.17.3"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
+  }
+}
