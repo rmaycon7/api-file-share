@@ -1,6 +1,3 @@
-# Host Share
-SPA para compartilhamento de arquivos usando API em NodeJS
-=======
 # API File Share
 API para compartilhar arquivos em NodeJs, também é a provedora de recurso da aplicação [host-share](https://github.com/mayconrebordao/host-share)
 
