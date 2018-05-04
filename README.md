@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# host-share
+# Host Share
 SPA para compartilhamento de arquivos usando API em NodeJS
 =======
 # API File Share
@@ -17,4 +16,4 @@ open browser:
 - http://localhost:3000/files/upload for upload one or more file
 - http://localhost:3000/files/download/:fileId for download one file
 - http://localhost:3000/files/delete/:fileId for delete one file
->>>>>>> 133ab14ccce19d76ac035cac118514debb02f94e
+
