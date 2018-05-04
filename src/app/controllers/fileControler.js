@@ -470,7 +470,7 @@ router.delete("/delete/:fileId", async (req, res, next) => {
                     // .then(error =>{
                     // 	console.log(error)
                     // })
-                    fs.unlink(path.resolve(file.path, file.name));
+                    fs.unlinkSync(path.resolve(file.path, file.name));
                     return res.status(202).send({
                         response: "File Delete Successfull."
                     });

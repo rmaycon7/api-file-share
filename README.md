@@ -1,15 +1,2 @@
-# API File Share
-API para compartilhar arquivos em NodeJs
-
-```shel
-git clone https://github.com/mayconrebordao/api-file-share.git
-cd api-file-share
-yarn install || npm installl
-yarn start || npm start
-```
-open browser:
-- http://localhost:3000/files/list for list all files
-- http://localhost:3000/files/list/:nameType for list a specific type file
-- http://localhost:3000/files/upload for upload one or more file
-- http://localhost:3000/files/download/:fileId for download one file
-- http://localhost:3000/files/delete/:fileId for delete one file
+# host-share
+SPA para compartilhamento de arquivos usando API em NodeJS
