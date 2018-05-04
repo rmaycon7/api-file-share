@@ -1,5 +1,5 @@
 # API File Share
-API para compartilhar arquivos em NodeJs
+API para compartilhar arquivos em NodeJs, também é a provedora de recurso da aplicação [host-share](https://github.com/mayconrebordao/host-share)
 
 ```shel
 git clone https://github.com/mayconrebordao/api-file-share.git
