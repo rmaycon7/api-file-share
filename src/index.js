@@ -10,9 +10,11 @@ const router = express.Router();
 
 // app.use(cors({ origin: "null" }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
         "Access-Control-Allow-Headers",
@@ -21,7 +23,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-require("./app/controllers/index")(app);
+const port = () => process.env.PORT || 55555;
+
+require("./app/routes/index")(app);
 
 app.use((req, res, next) => {
     const error = new Error("Resource Not Found!");
@@ -38,9 +42,13 @@ app.use((error, req, res, mext) => {
 
 // console.
 
-app.listen(3000, error => {
+app.listen(port()
+           , error => {
     // if(error) console.log({erro: error})
     // else
-    console.clear();
-    console.log("server run port 3000");
+    if(!error){
+        
+        console.clear();
+        console.log("server run port " + port());
+    }
 });

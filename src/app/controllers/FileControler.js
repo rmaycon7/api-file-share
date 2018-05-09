@@ -1,5 +1,6 @@
 "use-strict";
 const express = require("express");
+const router = express.Router();
 // const fs = require('fs');
 const multer = require("multer");
 
@@ -15,7 +16,6 @@ let upload = multer({
 
 // console.log(upload.dest);
 
-const router = express.Router();
 
 const File = require("../models/File");
 
@@ -134,7 +134,7 @@ function checkType(file) {
 //     return ;
 // }
 
-router.get("/list", async (req, res, next) => {
+exports.listAll = async (req, res, next) => {
     try {
         File.find()
             .select("originalname size _id type")
@@ -191,9 +191,9 @@ router.get("/list", async (req, res, next) => {
         });
         // console.log(e);
     }
-});
+};
 
-router.get("/list/:nameType", async (req, res, next) => {
+exports.listCategory = async (req, res, next) => {
     try {
         let type = req.params.nameType;
         type.toLowerCase();
@@ -220,9 +220,9 @@ router.get("/list/:nameType", async (req, res, next) => {
                 }
                 // console.log(response);
 
-                return res.status(200).send({
-                    response: response
-                });
+                return res.status(200).send(
+                    response
+                );
             })
             .catch(erro => {
                 // console.log(erro);
@@ -240,9 +240,9 @@ router.get("/list/:nameType", async (req, res, next) => {
     }
 
     // res.send({ ok: true , nameType: req.params.nameType})
-});
+};
 
-router.get("/download/:fileId", async (req, res, next) => {
+exports.download = async (req, res, next) => {
     // var options = {
     // root: __dirname + '/public/',
     // dotfiles: 'deny',
@@ -279,25 +279,23 @@ router.get("/download/:fileId", async (req, res, next) => {
                 // res.set(aux)
                 // console.log(aux)
                 // res.send()
-                fs.exists(path.resolve(file.path,file.name), (exists) => {
-                  if (exists) {
+                fs.exists(path.resolve(file.path, file.name), (exists) => {
+                    if (exists) {
 
-                    res.attachment((file.originalname));
-                    return res.status(200).sendFile(file.name, options);
-                  }
-                  else{
-                    try{
-                        File.findByIdAndRemove(req.params.fileId, (error) =>{
-                            return res.status(404).send({
-                                error: "Arquivo Não encontrado"
+                        res.attachment((file.originalname));
+                        return res.status(200).sendFile(file.name, options);
+                    } else {
+                        try {
+                            File.findByIdAndRemove(req.params.fileId, (error) => {
+                                return res.status(404).send({
+                                    error: "Arquivo Não encontrado"
+                                });
                             });
-                        });
-                    }
-                    catch(error) {
+                        } catch (error) {
+
+                        }
 
                     }
-                    
-                  }
                 });
             })
             .catch(erro => {
@@ -315,67 +313,68 @@ router.get("/download/:fileId", async (req, res, next) => {
     }
 
     // res.send({ ok: true, fileId: req.params.fileId })
-});
+};
 
-router.post("/upload", async (req, res, next) => {
-
-
+exports.upload = async (req, res, next) => {
 
 
-async function checkFile(filename, cont){
-    const vetor = await File.find({type: checkType(filename).type}).select('originalname') 
-    // console.log(vetor)
 
-    function file_exists(type, types) {
-        let i = 0
-        while (i < types.length) {
-            if (types[i].originalname    === type) {
-                return true
+
+    async function checkFile(filename, cont) {
+        const vetor = await File.find({
+            type: checkType(filename).type
+        }).select('originalname')
+        // console.log(vetor)
+
+        function file_exists(type, types) {
+            let i = 0
+            while (i < types.length) {
+                if (types[i].originalname === type) {
+                    return true
+                }
+                i++
             }
-            i++
+            return false
         }
-        return false
+
+        function checkFile_aux(filename, cont, vetor) {
+
+            if (file_exists(filename, vetor)) {
+                let extention = filename.split(".")[filename.split(".").length - 1];
+                let name = filename.substring(0, filename.length - (extention.length + 1))
+                // console.log(name)
+                // console.log(name.split('_'))
+                if (cont === 0) {
+                    cont++
+                    let finChekc = cont
+                    // console.log("fincheck = "+finChekc)
+
+                    let newName = name.substring(0, name.length)
+                    // console.log(newName+'_'+cont+'.'+extention)
+                    filename = checkFile_aux(newName + '_' + cont + '.' + extention, cont, vetor)
+
+                } else {
+
+                    let finChekc = name.split('_')[name.split('_').length - 1]
+                    // console.log("fincheck = "+finChekc)
+
+                    let newName = name.substring(0, name.length - (finChekc.length + 1))
+                    cont++
+                    // console.log(newName+'_'+cont+'.'+extention)
+                    filename = checkFile_aux(newName + '_' + cont + '.' + extention, cont, vetor)
+                }
+            }
+
+            return filename
+            // function getFilename(filename)
+
+
+        }
+        let returnn = await checkFile_aux(filename, cont, vetor)
+        // console.log(returnn)
+        return returnn
+
     }
-
-    function checkFile_aux(filename, cont, vetor){
-
-        if(file_exists(filename, vetor)){
-            let extention = filename.split(".")[filename.split(".").length - 1];
-            let name =  filename.substring(0,filename.length - (extention.length +1 ))
-            // console.log(name)
-            // console.log(name.split('_'))
-            if (cont === 0){
-                cont++
-                let finChekc = cont
-                // console.log("fincheck = "+finChekc)
-
-                let newName = name.substring(0, name.length )
-                // console.log(newName+'_'+cont+'.'+extention)
-                filename = checkFile_aux(newName+'_'+cont+'.'+extention, cont, vetor)
-
-            }
-            else{
-
-                let finChekc = name.split('_')[name.split('_').length -1]
-                // console.log("fincheck = "+finChekc)
-
-                let newName = name.substring(0, name.length - (finChekc.length + 1))
-                cont++
-                // console.log(newName+'_'+cont+'.'+extention)
-                filename = checkFile_aux(newName+'_'+cont+'.'+extention, cont, vetor)
-            }
-        }
-
-        return filename
-        // function getFilename(filename)
-
-
-    }   
-    let returnn = await checkFile_aux(filename, cont, vetor)
-    // console.log(returnn)
-    return returnn
-
-}
 
 
 
@@ -406,7 +405,7 @@ async function checkFile(filename, cont){
                 try {
                     const tmp = await File.create({
                         name: mapFile.filename,
-                        originalname: await checkFile(mapFile.originalname,0),
+                        originalname: await checkFile(mapFile.originalname, 0),
                         path: mapFile.destination,
                         type: checkType(mapFile.originalname).type,
                         size: mapFile.size
@@ -416,10 +415,9 @@ async function checkFile(filename, cont){
                     responsefiles.push(tmp);
                     // console.log(tmp)
                 } catch (e) {
-                    try{
+                    try {
                         fs.unlink(mapFile.path);
-                    }
-                    catch(error){}
+                    } catch (error) {}
                     responseerro.push({
                         error: e,
                         file: mapFile,
@@ -452,9 +450,9 @@ async function checkFile(filename, cont){
         return res.status(202).send(response);
         // console.log(req.file)
     });
-});
+};
 
-router.delete("/delete/:fileId", async (req, res, next) => {
+exports.delete = async (req, res, next) => {
     try {
         File.findById(req.params.fileId)
             .exec()
@@ -512,6 +510,6 @@ router.delete("/delete/:fileId", async (req, res, next) => {
     // }))
 
     // res.send()
-});
+};
 
-module.exports = app => app.use("/files", router);
+// module.exports = app => app.use("/files", router);
