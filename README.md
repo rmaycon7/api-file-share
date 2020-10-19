@@ -8,9 +8,9 @@ yarn install || npm installl
 yarn start || npm start
 ```
 open browser:
-- http://localhost:3000/files/list for list all files
-- http://localhost:3000/files/list/:nameType for list a specific type file
-- http://localhost:3000/files/upload for upload one or more file
-- http://localhost:3000/files/download/:fileId for download one file
-- http://localhost:3000/files/delete/:fileId for delete one file
+- http://localhost:55555/files/list for list all files
+- http://localhost:55555/files/list/:nameType for list a specific type file
+- http://localhost:55555/files/upload for upload one or more file
+- http://localhost:55555/files/download/:fileId for download one file
+- http://localhost:55555/files/delete/:fileId for delete one file
 
