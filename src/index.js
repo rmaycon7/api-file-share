@@ -23,7 +23,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-const port = () => process.env.PORT || 55555;
+const port = () => process.env.PORT || 6666;
 
 require("./app/routes/index")(app);
 
